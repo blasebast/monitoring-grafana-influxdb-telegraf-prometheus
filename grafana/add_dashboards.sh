@@ -50,7 +50,8 @@ wait_for_api() {
 replace_datasource() {
    local dashboard_file=$1
    local datasource_name=$2
-   cmd="sed -i.bak_remove \"s/\\\${DS_INFLUXDB}/${datasource_name}/g\" ${dashboard_file}"
+   local old_datasource_name=$3
+   cmd="sed -i.bak_remove \"s/${old_datasource_name}/${datasource_name}/g\" ${dashboard_file}"
    eval ${cmd} || return 1
    return 0
 }
@@ -58,22 +59,22 @@ replace_datasource() {
 install_dashboards() {
   local dashboard
 
-  for dashboard in dashboards/*.json
+  for dashboard in /var/lib/grafana/ds/dashboards/*.json
 
   do
   if [[ $(grep "\"name\": \"DS_INFLUXDB\"," ${dashboard}) ]]; then
     echo -e "${PURPLE}Dashboard ${dashboard} seems to be for InfluxDB datasource${NC}"
+    old_datasource_name="\\\${DS_INFLUXDB}"
     datasource_name="influxdb"
   fi 
   if [[ $(grep "\"name\": \"DS_PROMETHEUS\"," ${dashboard}) ]]; then
     echo -e "${PURPLE}Dashboard ${dashboard} seems to be for Prometheus datasource${NC}"
+    old_datasource_name="\\\${DS_PROMETHEUS}"
     datasource_name="prometheus"
   fi 
     if [[ -f "${dashboard}" ]]; then
       echo -e "${LCYAN}Installing dashboard ${dashboard}${NC}"
-      replace_datasource ${dashboard} ${datasource_name}
-      # backup will be created before wrapping dashboard ^
-      #echo -e "{\"dashboard\": `cat $dashboard`}" > "${dashboard}.wrapped"
+      replace_datasource ${dashboard} ${datasource_name} ${old_datasource_name}
       cp ${dashboard} ${dashboard}.wrapped
       sed -i '1s/^/{"dashboard":\n/' ${dashboard}.wrapped
       echo "}" >> ${dashboard}.wrapped
@@ -84,7 +85,6 @@ install_dashboards() {
         echo -e "\n** ${RED}installation of: ${PURPLE}\"${dashboard}\"${RED} failed **${NC}"
       fi
     fi
-  #rm ${dashboard}.wrapped
   done
 }
 
@@ -94,4 +94,5 @@ configure_grafana() {
 }
 
 configure_grafana
+rm -vf /var/lib/grafana/ds/dashboards/*.{wrapped,bak_remove}
 

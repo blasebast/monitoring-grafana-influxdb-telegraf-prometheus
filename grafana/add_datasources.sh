@@ -2,7 +2,7 @@
 #set -e
 
 # ADD INFLUXDB DATASOURCE
-curl -s -v -H "Content-Type: application/json" \
+curl -s -H "Content-Type: application/json" \
     -XPOST http://admin:admin@localhost:3000/api/datasources \
     -d @- <<EOF
 {
@@ -18,7 +18,7 @@ curl -s -v -H "Content-Type: application/json" \
 EOF
 
 ## ADD PROMETHEUS DATASOURCE
-curl -s -v -H "Content-Type: application/json" \
+curl -s -H "Content-Type: application/json" \
     -XPOST http://admin:admin@localhost:3000/api/datasources \
     -d @- <<EOF
 {
