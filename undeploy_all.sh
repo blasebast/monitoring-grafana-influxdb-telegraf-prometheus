@@ -13,16 +13,16 @@ do_cleanup () {
 	fi
 
 	
-	read -r -p "Do you want to delete all docker \"bridge\" networks? [y/N] " response
-	if [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]]
-	then
-		for n in $(docker network ls | grep "bridge" | awk '/ / { print $1 }'); do
-			echo -e "attempting to delete network: $n"
-			docker network rm $n || echo "cannot remove: $n"
-		done
-	else
-        	echo -e "'no' chosen"
-	fi
+#	read -r -p "Do you want to delete all docker \"bridge\" networks? [y/N] " response
+#	if [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]]
+#	then
+#		for n in $(docker network ls | grep "bridge" | awk '/ / { print $1 }'); do
+#			echo -e "attempting to delete network: $n"
+#			docker network rm $n || echo "cannot remove: $n"
+#		done
+#	else
+#        	echo -e "'no' chosen"
+#	fi
 
 	read -r -p "Do you want to delete all docker dangling images? [y/N] " response
 	if [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]]

@@ -46,11 +46,12 @@ services:
       command: ["bash", "/var/lib/grafana/ds/add_datasources.sh"]
         
   telegraf:
-    image: telegraf:latest
+    image: telegraf:1.6-alpine
     container_name: telegraf
     network_mode: "host"
     volumes:
       - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - /var/run/utmp:/var/run/utmp:ro
     environment:
       # real influx host
       INFLUXDB_URI: "http://localhost:8086"
@@ -60,8 +61,12 @@ services:
     container_name: prometheus
     volumes:
      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    links:
+      - cadvisor:cadvisor
+      - alertmanager:alertmanager
     networks:
      - private
+     - public
     command: "--config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus"
     ports:
      - 9090:9090
@@ -80,12 +85,41 @@ services:
       - public
       - private
     environment:
-      DOGSNAME:      "Gula&Bodka"
-    command:
-      - "--collector.textfile"
-      - "--collector.textfile.directory=/var/lib/node_exporter/textfile_collector/"
+      PURPOSE:      "PERFORMANCE_MONITORING"
     expose:
       - 9100
     ports:
       - 9100:9100
 
+#
+  cadvisor:
+    image: google/cadvisor:v0.28.3
+    container_name: cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      #- /cgroup:/cgroup:ro #doesn't work on MacOS only for Linux
+    restart: unless-stopped
+    expose:
+      - 8080
+    networks:
+      - private
+      - public
+    labels:
+      org.label-schema.group: "monitoring"
+
+  alertmanager:
+    image: prom/alertmanager
+    container_name: alertmanager
+    ports:
+      - 9093:9093
+    volumes:
+      - ./alertmanager/:/etc/alertmanager/
+    networks:
+      - private
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
