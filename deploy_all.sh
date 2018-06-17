@@ -80,20 +80,20 @@ echo "adding dashboards..."
 docker exec -it -u 0 grafana /var/lib/grafana/ds/add_dashboards.sh
 
 
-## NOW LET'S SECURE GRAFANA
-# CHECKING OUT ORIGINAL FILE
-echo -e "checking out original docker-compose.yml"
-git checkout docker-compose.yml
-
-## STOPPING and REMOVING GRAFANA CONTAINER
-echo -e "stopping & removing grafana container"
-container_id=$(docker container ls | grep grafana| awk '{print $1}')
-docker stop $container_id
-docker rm $container_id
-
-# REPLACING HTTP with HTTPS
-echo -e "changing http to https"
-sed -i 's/GF_SERVER_PROTOCOL: "http"/GF_SERVER_PROTOCOL: "https"/g' docker-compose.yml
-docker-compose up -d grafana
-echo -e "reverting: changing https to http"
-sed -i 's/GF_SERVER_PROTOCOL: "https"/GF_SERVER_PROTOCOL: "http"/g' docker-compose.yml
+### NOW LET'S SECURE GRAFANA
+## CHECKING OUT ORIGINAL FILE
+#echo -e "checking out original docker-compose.yml"
+#git checkout docker-compose.yml
+#
+### STOPPING and REMOVING GRAFANA CONTAINER
+#echo -e "stopping & removing grafana container"
+#container_id=$(docker container ls | grep grafana| awk '{print $1}')
+#docker stop $container_id
+#docker rm $container_id
+#
+## REPLACING HTTP with HTTPS
+#echo -e "changing http to https"
+#sed -i 's/GF_SERVER_PROTOCOL: "http"/GF_SERVER_PROTOCOL: "https"/g' docker-compose.yml
+#docker-compose up -d grafana
+#echo -e "reverting: changing https to http"
+#sed -i 's/GF_SERVER_PROTOCOL: "https"/GF_SERVER_PROTOCOL: "http"/g' docker-compose.yml

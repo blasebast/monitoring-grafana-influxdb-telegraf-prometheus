@@ -17,18 +17,31 @@ If not - it will still take mentioned ~ 1 minute + time needed for docker instal
 
 ## Here is how to install:
 
+### With certificates and HTTPS (optional):
 Prepare certificate in /etc/grafana/ (privkey1.pem, fullchain1.pem).
 
-**If you want to have your Grafana insecure comment following lines in** *docker-compose.yml*:
+Uncomment following lines in *docker-compose.yml*:
 
-        GF_SERVER_CERT_FILE: "/etc/grafana/fullchain1.pem"
-        GF_SERVER_CERT_KEY: "/etc/grafana/privkey1.pem"
-
-
-
-Also comment these lines in "deploy_all.sh":
-
+```bash
+...
+      volumes:
+        - grafana_lib:/var/lib/grafana
+#        - /etc/grafana/privkey1.pem:/etc/grafana/privkey1.pem:ro
+#        - /etc/grafana/fullchain1.pem:/etc/grafana/fullchain1.pem:ro
+...
+       environment:
+         GF_AUTH_ANONYMOUS_ENABLED: "false"
+         GF_SECURITY_ADMIN_PASSWORD: "nimda321"
+...
+#        GF_SERVER_CERT_FILE: "/etc/grafana/fullchain1.pem"
+#        GF_SERVER_CERT_KEY: "/etc/grafana/privkey1.pem"
+...
 ```
+
+
+Also uncomment these lines in "deploy_all.sh":
+
+```bash
 ## NOW LET'S SECURE GRAFANA
 # CHECKING OUT ORIGINAL FILE
 echo -e "checking out original docker-compose.yml"
@@ -48,10 +61,9 @@ echo -e "reverting: changing https to http"
 sed -i 's/GF_SERVER_PROTOCOL: "https"/GF_SERVER_PROTOCOL: "http"/g' docker-compose.yml
 ```
 
-Next execute:
-* $ clone the repository
-* $ cd to cloned dir
-* $ chmod +x ./deploy_all.sh; ./deploy_all.sh
+### Deployment: 
+
+$ ./deploy_all.sh
 
 
-    Monitoring should be up and running http://_**hostname**_:3001/
+    Monitoring should be up and running http://_**hostname**_:3001/ or https://_**hostname**_:3001/ 
