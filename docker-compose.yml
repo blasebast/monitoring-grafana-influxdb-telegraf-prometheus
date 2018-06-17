@@ -23,7 +23,7 @@ services:
       INFLUXDB_REPORTING_DISABLED: "true"
       INFLUXDB_DB: telegraf
       INFLUXDB_USER: telegraf
-      INFLUXDB_USER_PASSWORD: nimda
+      INFLUXDB_USER_PASSWORD: nimda321
 
   grafana:
       image: grafana/grafana:5.1.3
@@ -35,15 +35,23 @@ services:
         - private
       volumes:
         - grafana_lib:/var/lib/grafana
+        - /etc/grafana/privkey1.pem:/etc/grafana/privkey1.pem:ro
+        - /etc/grafana/fullchain1.pem:/etc/grafana/fullchain1.pem:ro
         - ${PWD}/grafana/:/var/lib/grafana/ds/
       environment:
-        GF_AUTH_ANONYMOUS_ENABLED: "true"
-        GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"
+        GF_AUTH_ANONYMOUS_ENABLED: "false"
+        GF_SECURITY_ADMIN_PASSWORD: "nimda321"
+        GF_SECURITY_ADMIN_USER: "admin"
+        GF_SERVER_PROTOCOL: "http"
+        GF_SERVER_DOMAIN: "sebson.ddns.net"
+        GF_SERVER_CERT_FILE: "/etc/grafana/fullchain1.pem"
+        GF_SERVER_CERT_KEY: "/etc/grafana/privkey1.pem"
+        GF_SERVER_METRICS_ENABLED: "true"
+        GF_SERVER_METRICS_INTERVAL_SECONDS: "10"
         INFLUXDB_URI: "http://influxdb:8086"
         INFLUXDB_DB: telegraf
         INFLUXDB_USER: telegraf
-        INFLUXDB_USER_PASSWORD: nimda
-      command: ["bash", "/var/lib/grafana/ds/add_datasources.sh"]
+        INFLUXDB_USER_PASSWORD: nimda321
         
   telegraf:
     image: telegraf:latest
@@ -64,7 +72,7 @@ services:
      - private
     command: "--config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus"
     ports:
-     - 9090:9090
+     - 9091:9090
     depends_on:
      - node_exporter
 
@@ -80,12 +88,24 @@ services:
       - public
       - private
     environment:
-      DOGSNAME:      "Gula&Bodka"
+      DOGSNAME:      "GULA,BODKA"
     command:
-      - "--collector.textfile"
+      - "--collectors.enabled=textfile"
       - "--collector.textfile.directory=/var/lib/node_exporter/textfile_collector/"
     expose:
       - 9100
     ports:
-      - 9100:9100
-
+      - 9101:9100
+  cadvisor:
+    image: google/cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    ports:
+      - 18080:8080
+    networks:
+      - private 
+      - public
+    restart: unless-stopped 

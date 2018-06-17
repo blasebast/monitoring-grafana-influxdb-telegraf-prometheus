@@ -19,7 +19,7 @@ LPURPLE='\033[01;35m'
 LCYAN='\033[01;36m'
 WHITE='\033[01;37m'
 
-GRAFANA_URL=http://admin:admin@localhost:3000
+GRAFANA_URL=http://admin:nimda321@localhost:3000
 
 
 grafana_api() {

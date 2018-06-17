@@ -3,7 +3,7 @@
 
 # ADD INFLUXDB DATASOURCE
 curl -s -H "Content-Type: application/json" \
-    -XPOST http://admin:admin@localhost:3000/api/datasources \
+    -XPOST http://admin:nimda321@localhost:3000/api/datasources \
     -d @- <<EOF
 {
     "name": "influxdb",
@@ -12,14 +12,14 @@ curl -s -H "Content-Type: application/json" \
     "url": "http://influxdb:8086",
     "database": "telegraf",
     "user":"telegraf",
-    "password":"nimda",
+    "password":"nimda321",
     "basicAuth":false
 }
 EOF
 
 ## ADD PROMETHEUS DATASOURCE
 curl -s -H "Content-Type: application/json" \
-    -XPOST http://admin:admin@localhost:3000/api/datasources \
+    -XPOST http://admin:nimda321@localhost:3000/api/datasources \
     -d @- <<EOF
 {
     "name": "prometheus",
