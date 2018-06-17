@@ -82,8 +82,8 @@ docker exec -it -u 0 grafana /var/lib/grafana/ds/add_dashboards.sh
 
 ## NOW LET'S SECURE GRAFANA
 # CHECKING OUT ORIGINAL FILE
-#echo -e "checking out original docker-compose.yml"
-#git checkout docker-compose.yml
+echo -e "checking out original docker-compose.yml"
+git checkout docker-compose.yml
 
 ## STOPPING and REMOVING GRAFANA CONTAINER
 echo -e "stopping & removing grafana container"
