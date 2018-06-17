@@ -82,8 +82,8 @@ docker exec -it -u 0 grafana /var/lib/grafana/ds/add_dashboards.sh
 
 ## NOW LET'S SECURE GRAFANA
 # CHECKING OUT ORIGINAL FILE
-echo -e "checking out original docker-compose.yml"
-git checkout docker-compose.yml
+#echo -e "checking out original docker-compose.yml"
+#git checkout docker-compose.yml
 
 ## STOPPING and REMOVING GRAFANA CONTAINER
 echo -e "stopping & removing grafana container"
@@ -95,3 +95,5 @@ docker rm $container_id
 echo -e "changing http to https"
 sed -i 's/GF_SERVER_PROTOCOL: "http"/GF_SERVER_PROTOCOL: "https"/g' docker-compose.yml
 docker-compose up -d grafana
+echo -e "reverting: changing https to http"
+sed -i 's/GF_SERVER_PROTOCOL: "https"/GF_SERVER_PROTOCOL: "http"/g' docker-compose.yml
