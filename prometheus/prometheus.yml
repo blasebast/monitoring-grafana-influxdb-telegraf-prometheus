@@ -36,3 +36,10 @@ scrape_configs:
     scrape_interval: "15s"
     static_configs:
       - targets: ['cadvisor:8080']
+
+alerting:
+  alertmanagers:
+  - scheme: http
+    static_configs:
+    - targets:
+      - "alertmanager:9093"

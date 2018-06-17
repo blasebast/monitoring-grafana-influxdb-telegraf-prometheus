@@ -80,9 +80,9 @@ install_dashboards() {
       echo "}" >> ${dashboard}.wrapped
 
       if grafana_api POST /api/dashboards/db "" "${dashboard}.wrapped"; then
-        echo -e "\n** ${GREEN}installed ok **${NC}"
+	echo -e "\n** ${GREEN}installed ok **${NC}"
       else
-        echo -e "\n** ${RED}installation of: ${PURPLE}\"${dashboard}\"${RED} failed **${NC}"
+	echo -e "\n** ${RED}installation of: ${PURPLE}\"${dashboard}\"${RED} failed.**${NC}"
       fi
     fi
   done
