@@ -81,15 +81,12 @@ docker exec -it -u 0 grafana /var/lib/grafana/ds/add_dashboards.sh
 
 
 ### NOW LET'S SECURE GRAFANA
-## CHECKING OUT ORIGINAL FILE
-#echo -e "checking out original docker-compose.yml"
-#git checkout docker-compose.yml
-#
 ### STOPPING and REMOVING GRAFANA CONTAINER
 #echo -e "stopping & removing grafana container"
 #container_id=$(docker container ls | grep grafana| awk '{print $1}')
 #docker stop $container_id
 #docker rm $container_id
+#find grafana -name '*.pem' -exec chmod 666 {} \;
 #
 ## REPLACING HTTP with HTTPS
 #echo -e "changing http to https"

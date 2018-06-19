@@ -35,8 +35,8 @@ services:
         - private
       volumes:
         - grafana_lib:/var/lib/grafana
-#        - /etc/grafana/privkey1.pem:/etc/grafana/privkey1.pem:ro
-#        - /etc/grafana/fullchain1.pem:/etc/grafana/fullchain1.pem:ro
+#        - ${PWD}/grafana/privkey1.pem:/privkey1.pem:ro
+#        - ${PWD}/grafana/fullchain1.pem:/fullchain1.pem:ro
         - ${PWD}/grafana/:/var/lib/grafana/ds/
       environment:
         GF_AUTH_ANONYMOUS_ENABLED: "false"
@@ -44,8 +44,8 @@ services:
         GF_SECURITY_ADMIN_USER: "admin"
         GF_SERVER_PROTOCOL: "http"
         GF_SERVER_DOMAIN: "sebson.ddns.net"
-#        GF_SERVER_CERT_FILE: "/etc/grafana/fullchain1.pem"
-#        GF_SERVER_CERT_KEY: "/etc/grafana/privkey1.pem"
+#        GF_SERVER_CERT_FILE: "/fullchain1.pem"
+#        GF_SERVER_CERT_KEY: "/privkey1.pem"
         GF_SERVER_METRICS_ENABLED: "true"
         GF_SERVER_METRICS_INTERVAL_SECONDS: "10"
         INFLUXDB_URI: "http://influxdb:8086"
@@ -102,7 +102,7 @@ services:
       - /var/run:/var/run:rw
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
-      #- /cgroup:/cgroup:ro #doesn't work on MacOS only for Linux
+      - /cgroup:/cgroup:ro #doesn't work on MacOS only for Linux
     restart: unless-stopped
     expose:
       - 8080
