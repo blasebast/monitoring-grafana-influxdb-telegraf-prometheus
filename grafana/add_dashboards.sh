@@ -19,7 +19,23 @@ LPURPLE='\033[01;35m'
 LCYAN='\033[01;36m'
 WHITE='\033[01;37m'
 
-GRAFANA_URL=http://admin:nimda321@localhost:3000
+# Load environment variables from .env file
+if [ -f .env ]; then
+    export $(grep -v '^#' .env | xargs)
+else
+    echo "ERROR: .env file not found. Please create it from .env.example"
+    exit 1
+fi
+
+# Validate required environment variables
+for var in GF_SECURITY_ADMIN_USER GF_SECURITY_ADMIN_PASSWORD GRAFANA_PORT; do
+    if [ -z "$(eval echo \$$var)" ]; then
+        echo "ERROR: Required environment variable $var is not set"
+        exit 1
+    fi
+done
+
+GRAFANA_URL="http://${GF_SECURITY_ADMIN_USER}:${GF_SECURITY_ADMIN_PASSWORD}@localhost:${GRAFANA_PORT}"
 
 
 grafana_api() {

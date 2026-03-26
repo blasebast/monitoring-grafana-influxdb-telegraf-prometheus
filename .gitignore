@@ -1,76 +1,32 @@
-# swp vim edits
+# Environment variables with secrets
+.env
+.env.local
+.env.*.local
+
+# Docker volumes and data
+data/
+*.log
+
+# Backup files
+*.bak
+*.bak_remove
+*.wrapped
+
+# IDE
+.vscode/
+.idea/
 *.swp
 *.swo
-.os_release.sh
-.configuration.cluster  
-.configuration.installs
-.awscli-bundle/
+*~
 
-# Python
-*.pyc
-**/.cache
-**/.coverage
-
-# Eclipse related files
-.classpath
-.cproject
-.deps
-.project
-.settings
-.metadata/
-
-# MAC DS files
+# OS
 .DS_Store
+Thumbs.db
 
-# STS
-.springBeans
-# Maven and build related
-target/
-packages.mk
+# Generated files
+node_modules/
+dist/
 
-# IntelliJ IDEA related files
-*.iml
-*.iws
-*.ipr
-.idea/
-
-.sonar-ide.properties
-
-
-*.orig
-*rebel*.xml
-.idea/
-
-/INSTALL
-/Makefile
-/aclocal.m4
-/autom4te.cache/
-/build/aux/
-/config.log
-/config.status
-/configure
-
-# sed related files
-**/*.bak_remove
-
-# terraform state files
-**/.terraform
-**/*.tfstate
-**/*.tfstate.backup
-**/.terraform.tfstate.lock.info
-
-# Folders and files
-certificates
-terraform
-configuration.cluster
-configuration.installs
-other
-ec2
-monitoring.backup
-monitoring/monitoring_*_dir
-**/*.bak_remove
-**/*.wrapped
-data
-
-# Keys
-**/*.pem
+# Temporary files
+*.tmp
+*.temp
